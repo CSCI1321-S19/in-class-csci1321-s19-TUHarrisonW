@@ -1,7 +1,7 @@
 package MUD
 
 class Player {
-  var croom = 0
+  private var croom = 0
   private var inventory = List[Item]()
   def processCommand(command: String): Unit = {
     val test = if(command.indexOf(" ") != -1) (command.split(" ").map(_.trim)).toList else List(command, "none")

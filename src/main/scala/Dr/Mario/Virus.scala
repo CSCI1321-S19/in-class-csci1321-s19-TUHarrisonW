@@ -1,6 +1,7 @@
 package Dr.Mario
 
-class Virus(val x: Int, val y: Int, val color: Int) {
-  def supported() = ???
+class Virus(val x: Int, val y: Int, val color: DrMarioColor.Value) extends Cell with BoardElement{
+  def supported() = true
+  def cells: List[Cell] = List(this)
   
 }

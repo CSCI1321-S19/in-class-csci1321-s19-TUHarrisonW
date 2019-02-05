@@ -7,7 +7,7 @@ object Main {
     val room = Room.rooms
     var option = ""
     var x = 1
-    println(room(player.croom).description())
+    println(room(0).description())
     while(x > 0) {
       option = readLine.toLowerCase().trim()
       if(option == "exit") x = 0 else player.processCommand(option)

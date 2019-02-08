@@ -7,7 +7,7 @@ import scalafx.scene.shape.Shape
  * The main at the bottom has an example of how you should create a Maze. See the documentation comments on the
  * apply method.
  */
-class RandomMaze private(val cellSize: Int, val wrap: Boolean, wallsInput: Array[Array[Int]]) extends Maze {
+class RandomMaze(val cellSize: Int, val wrap: Boolean, wallsInput: Array[Array[Int]]) extends Maze {
   require(cellSize > 1, "The cell size must be at least 2.")
   require(wallsInput.length > 0 && wallsInput(0).length > 0, "Dimensions of maze must both be greater than 0.")
   private val walls = wallsInput.map(row => row.map(i => i).toArray).toArray
@@ -169,16 +169,16 @@ object RandomMaze {
     new RandomMaze(cellSize, wrap, walls)
   }
 
-  /**
-   * This is just a sample that makes a maze and prints it out so that you can see what it looks like.
-   */
-  def main(args: Array[String]): Unit = {
-    val maze = RandomMaze(3, false, 20, 20, 0.6)
-    for (r <- -5 until maze.height + 5) {
-      for (c <- -5 until maze.width + 5) {
-        if (maze(r, c) == Wall) print('#') else print(' ')
-      }
-      println()
-    }
-  }
+//  /**
+//   * This is just a sample that makes a maze and prints it out so that you can see what it looks like.
+//   */
+//  def main(args: Array[String]): Unit = {
+//    val maze = RandomMaze(3, false, 20, 20, 0.6)
+//    for (r <- -5 until maze.height + 5) {
+//      for (c <- -5 until maze.width + 5) {
+//        if (maze(r, c) == Wall) print('#') else print(' ')
+//      }
+//      println()
+//    }
+//  }
 }

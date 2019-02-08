@@ -29,12 +29,12 @@ trait Maze extends Serializable {
   /**
    * Tells you the width of the maze in cells.
    */
-  def width: Int
+  def width: Int 
 
   /**
    * Tells you the height of the maze in cells.
    */
-  def height: Int
+  def height: Int 
 
   /**
    * Tells you if there is a wall at a particular row and column location.

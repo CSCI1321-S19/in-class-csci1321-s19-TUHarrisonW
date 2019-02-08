@@ -25,10 +25,10 @@ class Renderer3D(scene: Scene, maze: Maze, isoDistAngle: Option[(Double, Double)
   private val sceneEntities = mutable.Map[String, Shape3D]()
 
   // Change images and materials to match the desired theme of your game
-  private val wallImage = new Image("file:images/banish.gif")
-  private val floorImage = new Image("file:images/pebble_round.jpg")
-  private val ceilingImage = new Image("file:images/yellow_wood_planks.jpg")
-  private val enemyImage = new Image("file:images/enemy.png")
+  private val wallImage = Renderer3D.loadImage("/images/banish.gif")
+  private val floorImage = Renderer3D.loadImage("/images/pebble_round.jpg")
+  private val ceilingImage = Renderer3D.loadImage("/images/yellow_wood_planks.jpg")
+  private val enemyImage = Renderer3D.loadImage("/images/enemy.png")
   private val enemyMat = new PhongMaterial()
   enemyMat.diffuseMap = enemyImage
   private val generatorMat = new PhongMaterial(Color.Green)
@@ -155,4 +155,21 @@ class Renderer3D(scene: Scene, maze: Maze, isoDistAngle: Option[(Double, Double)
 //      }
 //    }
 //  }
+}
+
+object Renderer3D {
+    /**
+   * This method assumes that you are putting your images in src/main/resources. This directory is
+   * packaged into the JAR file. Eclipse doesn't use the JAR file, so this will go to the file in
+   * the directory structure if it can't find the resource in the classpath. The argument should be the
+   * path inside of the resources directory.
+   */
+  def loadImage(path: String): Image = {
+    val res = getClass.getResource(path)
+    if(res == null) {
+      new Image("file:src/main/resources"+path)
+    } else {
+      new Image(res.toExternalForm())
+    }
+  }
 }

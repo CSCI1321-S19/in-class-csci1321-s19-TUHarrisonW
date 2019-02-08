@@ -6,11 +6,11 @@ object Main {
     val player = new Player
     val room = Room.rooms
     var option = ""
-    var x = 1
+    var x = true
     println(room(0).description())
-    while(x > 0) {
+    while(x == true) {
       option = readLine.toLowerCase().trim()
-      if(option == "exit") x = 0 else player.processCommand(option)
+      if(option == "exit") x = false else player.processCommand(option)
     }
   }
 }

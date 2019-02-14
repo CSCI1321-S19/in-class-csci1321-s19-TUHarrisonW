@@ -56,7 +56,6 @@ object Main extends JFXApp {
       val timer = AnimationTimer(time => {
         if (lastTime != -1) {
           val delay = (time - lastTime) / 1e9
-          val xed = level.player.x
           level.update(delay)
           renderer.render(level, 50, 40)
         }

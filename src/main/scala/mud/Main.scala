@@ -1,4 +1,5 @@
 package MUD
+
 import io.StdIn._
 
 object Main {
@@ -7,7 +8,7 @@ object Main {
     val room = Room.rooms
     var option = ""
     var x = true
-    println(room(0).description())
+    println(room("L_Castle").description())
     while(x == true) {
       option = readLine.toLowerCase().trim()
       if(option == "exit") x = false else player.processCommand(option)

@@ -19,7 +19,7 @@ class Player(xp: Double, yp: Double, wp: Double, hp: Double) extends Entity{
 	def stillHere(): Boolean = ??? 
 
 	//Key Movements
-	def move(dx: Int,dy: Int): Player = new Player(x + dx,y + dy,0,0)
+	def move(dx: Double,dy: Double): Player = new Player(x + dx,y + dy, 1.0,1.0)
   
 	def upPressed() = upHeld = true
   def leftPressed() = { 

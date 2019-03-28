@@ -1,4 +1,4 @@
-package mud
+package MUD
 
 import akka.actor.ActorSystem
 import akka.actor.Props
@@ -25,10 +25,11 @@ class Room (
     case m => println("Room Unhandled message in Minion: " + m)
   }
   
-  def description(): String = { "\n" + name + "\n" + desc + "\nExits: " + 
+  def description(): String = { "\n" + name + "\n" + desc + "\n Exits: " + 
     (for(i <- 0 to exits.length-1) yield {if(exits(i) == "-1") "" else direction(i)}).filter(_ != "").mkString(", ") + 
-    "\nItems: " + (for(i <- 0 to items.length-1) yield {if(items(i).qty == 1) items(i).name else 
-        items(i).name + "(" + items(i).qty + "X)"}).toList.mkString(", ")
+    "\n Items: " + (for(i <- 0 to items.length-1) yield {if(items(i).qty == 1) items(i).name else 
+        items(i).name + "(" + items(i).qty + "X)"}).toList.mkString(", ") + "\nEnemies: " + 
+        (for(i <- 0 to enemies.length-1) yield { enemies(i).name }).mkString(", ")
    
   }
   

@@ -1,4 +1,4 @@
-package mud
+package MUD
 
 import io.StdIn._
 

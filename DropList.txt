@@ -1,0 +1,38 @@
+3
+bones
+These are the remains of a once living creature. 
+1
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+false
+false
+goblin, king_lewis
+100
+
+dagger
+Not the best weapon but its better then nothing.
+1
+0, +4, +2, -4, +1, 0, 0, 0, 0, 0, 0
+true
+hand
+goblin
+20
+
+gold
+It Gold you can buy things with it.
+3
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+false
+false
+goblin
+40
+
+############
+name: axe
+desc: It is used to cut down trees. It is not the best but it gets the job done.
+amount: 1
+stats: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+equipable: true
+slot: hand
+enemies: *** (lst)
+chance: *** (_/100)
+#############

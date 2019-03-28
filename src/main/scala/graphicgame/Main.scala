@@ -22,32 +22,38 @@ object Main extends JFXApp {
       val gc = canvas.graphicsContext2D
       val renderer = new Renderer2D(gc,10)
       val level = new Level
-      for (r <- -5 until level.maze.height + 5) {
-        for (c <- -5 until level.maze.width + 5) {
-          if (level.maze(r, c) == Wall) print('#') else print(' ')
-        }
-        println()
-      }
+      //for (r <- -5 until level.maze.height + 5) {
+      //  for (c <- -5 until level.maze.width + 5) {
+      //    if (level.maze(r, c) == Wall) print('#') else print(' ')
+      //  }
+      //  println()
+      //}
 		  
 		  content = canvas
 		  
 		  onKeyPressed = (ke: KeyEvent) => {
+		    if(level.lstplayer.length != 0){
         ke.code match {
-          case KeyCode.Up => level.player.upPressed()
-          case KeyCode.Down => level.player.downPressed()
-          case KeyCode.Left => level.player.leftPressed()
-          case KeyCode.Right => level.player.rightPressed()
+          case KeyCode.Up => level.lstplayer(0).upPressed()
+          case KeyCode.Down => level.lstplayer(0).downPressed()
+          case KeyCode.Left => level.lstplayer(0).leftPressed()
+          case KeyCode.Right => level.lstplayer(0).rightPressed()
+          case KeyCode.Space => level.lstplayer(0).spacePressed()
           case _ =>
         }
+		    }
       }
       
       onKeyReleased = (ke: KeyEvent) => {
+        if(level.lstplayer.length != 0){
         ke.code match {
-          case KeyCode.Up => level.player.upReleased()
-          case KeyCode.Down => level.player.downReleased()
-          case KeyCode.Left => level.player.leftReleased()
-          case KeyCode.Right => level.player.rightReleased()
+          case KeyCode.Up => level.lstplayer(0).upReleased()
+          case KeyCode.Down => level.lstplayer(0).downReleased()
+          case KeyCode.Left => level.lstplayer(0).leftReleased()
+          case KeyCode.Right => level.lstplayer(0).rightReleased()
+          case KeyCode.Space => level.lstplayer(0).spaceReleased()
           case _ =>
+        }
         }
       }
 		  
@@ -56,8 +62,10 @@ object Main extends JFXApp {
       val timer = AnimationTimer(time => {
         if (lastTime != -1) {
           val delay = (time - lastTime) / 1e9
-          level.update(delay)
-          renderer.render(level, 50, 40)
+          if(level.lstplayer.length != 0){
+            level.update(delay)
+            renderer.render(level, 50, 40)
+        }
         }
         lastTime = time
       })

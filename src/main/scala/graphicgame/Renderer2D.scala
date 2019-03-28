@@ -19,7 +19,7 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   private val playerImage = Renderer2D.loadImage("/images/player.png")
   private val enemyImage = Renderer2D.loadImage("/images/enemy.png")
   private val generatorImage = Renderer2D.loadImage("/images/generator.png")
-  private val bulletImage = Renderer2D.loadImage("/images/bullet.png")
+  private val bombImage = Renderer2D.loadImage("/images/bullet.png")
   
 
   /**
@@ -67,13 +67,16 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
       val img = e match {
         case p: Player => { 
           gc.fill = Color.Green 
-          gc.fillRect(blocksToPixelsX(level.player.x), blocksToPixelsY(level.player.y), blockSize, blockSize) //playerImage
+          gc.fillRect(blocksToPixelsX(level.lstplayer(0).x), blocksToPixelsY(level.lstplayer(0).y), blockSize, blockSize) //playerImage
         }
         case e: Enemy => { //enemyImage 
           gc.fill = Color.Red 
-          gc.fillRect(blocksToPixelsX(level.enemy.x), blocksToPixelsY(level.enemy.y), blockSize, blockSize)
+          gc.fillRect(blocksToPixelsX(level.lstenemy(level.lstenemy.indexOf(e)).x), blocksToPixelsY(level.lstenemy(level.lstenemy.indexOf(e)).y), blockSize, blockSize)
         }
-//        case b: Bullet => bulletImage
+        case b: Bomb => {
+          gc.fill = Color.Blue 
+          gc.fillRect(blocksToPixelsX(level.lstbomb(0).x), blocksToPixelsY(level.lstbomb(0).y), blockSize, blockSize)
+        }
 //        case g: Generator => generatorImage
       }
 //      if(level.maze.wrap) {

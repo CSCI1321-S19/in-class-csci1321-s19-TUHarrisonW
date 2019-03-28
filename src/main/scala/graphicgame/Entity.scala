@@ -12,6 +12,11 @@ trait Entity extends Serializable {
 }
 
 object Entity {
+  
+  def isClear(x: Int, y: Int, ent: Entity, maze: Maze): Boolean = {
+    if(maze(ent.x.toInt + x, ent.y.toInt + y) != Wall) true 
+    else false
+  }
   def intersect(e1: Entity, e2: Entity): Boolean = {
     ((e1.x-e2.x).abs < (e1.width+e2.width)/2) && ((e1.y-e2.y).abs < (e1.height+e2.height)/2)
   }

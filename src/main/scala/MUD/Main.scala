@@ -1,4 +1,4 @@
-package mud
+package MUD
 
 import io.StdIn._
 import akka.actor.Props
@@ -14,16 +14,12 @@ import akka.actor.ActorRef
 
 object Main {
   def main(args: Array[String]): Unit = {
+    println("Ready")
     val playerManager = start._playerManager
     val roomManager = start._roomManager
-    val npcManager = start._npcManager
     val system = start.system
     
-    //roomManager ! cases.readRooms(roomManager)
-    //npcManager ! cases.readNPCs(npcManager)
-    Startup
-    println("Ready")
-    
+    roomManager ! cases.readRooms(roomManager)
     
     var option = ""
     
@@ -39,7 +35,6 @@ object Main {
           out.println("What is your name? (No spaces)")
           val name = in.readLine().toLowerCase()
           playerManager ! cases.CreateChild(sock, in, out, name)
-          playerManager ! cases.directCmd(name, "look")
         }
       }
   }

@@ -1,4 +1,4 @@
-package mud
+package MUD
 
 import collection.mutable.Buffer
 import akka.actor.Actor
@@ -16,11 +16,9 @@ class Player (sock: Socket, in: BufferedReader, out: PrintStream, name: String) 
     case s:String => processCommand(s)
     case recievedesc(s:String, name: String) => {
       out.println(s)
-      npcManager ! sendplrroom(name, croom)
-      playerManager ! sendplrroom(name, croom)
+      playerManager ! cases.sendplrroom(name, croom)
     }
     case recieveexit(e:Array[String], dir: Int,name: String) => move(e, dir)
-    case sendStats(npcStats, name) => out.println(statView(npcStats.toBuffer))
     case recieveItems(items:List[String], test:List[String], name: String) => {
       if (items.indexOf(test(1)) == -1) { 
         
@@ -31,10 +29,7 @@ class Player (sock: Socket, in: BufferedReader, out: PrintStream, name: String) 
         else 
           roomManager ! sendItem(test(1),-1, croom, test, name)
     }
-    case recieveItem(item:Item, test:List[String], name: String) => {
-      out.println("The item: " + item.name + " has been added to your inventory!")
-      addToInventory(item)
-    }
+    case recieveItem(item:Item, test:List[String], name: String) => addToInventory(item)
     case punished() => punishment()
     case exit(name:String) => playerManager ! exit(name)
     case CheckInput =>{
@@ -50,7 +45,10 @@ class Player (sock: Socket, in: BufferedReader, out: PrintStream, name: String) 
       out.println(s)
     }
     case frees(s:String) => free()
-    case directCmd(name: String, cmd: String) => startup()
+    case sayout(s:String) => {
+      out.println(s)
+    }
+    case recieveplrroom(lst: List[String]) => out.println("Players: "+lst.mkString(", "))
     case m => {
       
       out.println("player Unhandled message in Minion: " + m)
@@ -58,8 +56,6 @@ class Player (sock: Socket, in: BufferedReader, out: PrintStream, name: String) 
   }
   private val playerManager = start._playerManager
   private val roomManager = start._roomManager
-  private val activityManager = start._activityManager
-  private val npcManager = start._npcManager
   private var _roomMap = Map[String, ActorRef]()
   private val combat = new Combat
   private var croom = "L_Castle" 
@@ -68,24 +64,23 @@ class Player (sock: Socket, in: BufferedReader, out: PrintStream, name: String) 
       else inventory(i).qty}).sum
   private var equipment = Buffer[Item]()
   private val _name = name
-  private var hold = false
+  private var punish = false
   //Player Stats key: 
   //  1) Hp
   //  2-5) Attack: Stab, Slash, Crush, Magic, Ranged
   //  6-10 Defence: Stab, Slash, Crush, Magic, Ranged
-  private var playerStats = Buffer[Int](15,3,3,3,3,3,1,1,1,1,1)
+  private var playerStats = Buffer[Int](15,1,1,1,1,1,1,1,1,1,1)
   private var equipStats = Buffer[Int](0,0,0,0,0,0,0,0,0,0,0)
   private var kit = true
   private var sinv = true
-  private var npccombat = "none"
   def plzWork(roomMap: Map[String, ActorRef]): Unit = {
     val _roomMap = roomMap
   }
   
       
   def processCommand(command: String): Unit = {
+    if(punish != true) {
     val test = if(command.indexOf(" ") != -1) (command.split(" ").map(_.trim)).toList else List(command, "none")
-    if(hold != true) {
     test(0) match {
         case "sinv" => if(sinv == true) {
           for ( i <- sItems) addToInventory(i)
@@ -119,7 +114,7 @@ class Player (sock: Socket, in: BufferedReader, out: PrintStream, name: String) 
             else if(test.length -1 == 2) roomManager ! sendDropItem(getFromInventory(test(1), test(2).toInt), test(2).toInt, croom, test)
             else roomManager ! sendDropItem(getFromInventory(test(1), -1), -1, croom, test)
         case "look" => { 
-            roomManager ! senddesc(croom, name)
+            roomManager ! cases.senddesc(croom, name)
           }
         case "inv" => {
           out.println(inventoryListing)
@@ -143,22 +138,18 @@ class Player (sock: Socket, in: BufferedReader, out: PrintStream, name: String) 
             out.println("That item is not equiped.")
           } else addToInventory(unequipItem(test(1)))
         }
-        case "stats" => {
-          out.println(statView(equipStats))
-        }
         case "level" => {
           out.println(statView(playerStats))
         }
+        case "stats" => out.println(statView(equipStats))
         case "lewis" => if(kit) for(i <- tItems) equipItem(i) else {
-          out.println(kit)
+          
           out.println("That is not a command. Type Help for a list of valid commands.")
         }
-        case "attack" => {
-          hold = true
-          npccombat = test(1)
-          activityManager ! attack(name, test(1))
-        }
-        case "npc_stats" => npcManager ! stats(name, test(1))
+        //case "attack" => if(Room.rooms(croom).enemyNamesperRoom.indexOf(test(1)) == -1) out.println("That enemy is not in the room.", 1, in, out)
+        //    else combat(Room.rooms(croom).enemy(test(1)))
+        //case "enemy_stats" => if(Room.rooms(croom).enemyNamesperRoom.indexOf(test(1)) == -1) out.println("That enemy is not in the room.", 1, in, out)
+        //     else out.println(Room.rooms(croom).enemy(test(1)).stats.mkString(", ")), 1, in, out)
         case "exit" => {
           out.println("Th-Th-The, Th-Th-The, Th-Th... That's all, folks!")
         }
@@ -187,35 +178,10 @@ class Player (sock: Socket, in: BufferedReader, out: PrintStream, name: String) 
             }else processCommand("no")
           }
         case _ => {
-          
           out.println("That is not a command. Type Help for a list of valid commands. " + test(1))
         }
     }
-    } else {
-      test(0) match {
-        case "run" => {
-          out.println("You have escaped!")
-          hold = false
-        }
-        //case "stab" => activityManager ! hit(equipStats(1),playerStats(1),equipStats(6),playerStats(6), name)
-        //case "slash" => activityManager ! hit(equipStats(2),playerStats(2),equipStats(7),playerStats(7), name)
-        //case "crush" => activityManager ! hit(equipStats(3),playerStats(3),equipStats(8),playerStats(8), name)
-        //case "magic" => activityManager ! hit(equipStats(4),playerStats(4),equipStats(9),playerStats(9), name)
-        //case "ranged" => activityManager ! hit(equipStats(5),playerStats(5),equipStats(10),playerStats(10), name)
-        case "help" => combatHelp()
-        case _ => {
-          out.println("That is not a combat command. Type Help for a list of valid commands. " + test(1))
-        }
-      }
     }
-  }
-  
-  def startup(): Unit = {
-    out.println("Starting items have been added to your inventory.")
-    for(i <- sItems) addToInventory(i)
-    out.println("Type help for a list of commands.")
-    processCommand("look") 
-    
   }
   
   def getFromInventory(itemName: String, itemAmount: Int = -1): Item = {
@@ -249,6 +215,7 @@ class Player (sock: Socket, in: BufferedReader, out: PrintStream, name: String) 
   def addToInventory(item: Item): Unit = {
     val inames = itemListInventory
     
+    out.println("The item: " + item.name + " has been added to your inventory!")
     if(inames.indexOf(item.name) != -1) {
        val check = inames.indexOf(item.name)
        inventory = inventory.patch(check, Seq(inventory(check).copy(qty = inventory(check).qty + item.qty)), 1)
@@ -282,10 +249,10 @@ class Player (sock: Socket, in: BufferedReader, out: PrintStream, name: String) 
     (for(i <- 0 to equipment.length-1) yield {equipment(i).slot}).toList
   }
   def free(): Unit = {
-    hold = false
+    punish = false
   }
   def punishment(): Unit = {
-       hold = true
+       punish = true
        croom = "Varrock_Castle"
        playerManager ! cases.moveroom(croom, name)
   }
@@ -315,22 +282,17 @@ drop *item *amount - To drop an item from your inventory into the room. Default 
 exit - Leave the game
 help - Print the available commands and what they do
 inspect *item - Looks at item's information that is located inside your inventory.
-attack *enemy - Enter combat with enemy.
+WIP attack *enemy - Enter combat with enemy.
 eview - Looks at the items currently equiped.
+level - Looks at player stats.
+stats - Looks at player's equipment stats.
 equip *item - Adds item to players active equipment.
 unequip *item - Removes item from players active equipment.
-stats - Looks at player's stats.
-level - Looks at a player's level.
-enemy_stats - Looks at an enemie's stats.
+WIP enemy_stats - Looks at an enemie's stats.
 wisper *player name *message - Sends a private massage to a player.
-say *message - say something to all players in your current room.""")
+say *message - say something to all players in your current room")
+""")
   out.println(help)
-  }
-  
-  def combatHelp(): Unit = {
-    val help = ("""WIP stab, slash, crush, magic, ranged - attack with the different styles.
-run - try to escape.""")
-    out.println(help)
   }
   
   def inspectItem(itemName: String): Unit = {
@@ -423,40 +385,37 @@ run - try to escape.""")
       dRanged + "\n"
   }
   
-  def combatt(enemy: Enemy): Unit = {
+  def combat(enemy: Enemy): Unit = {
     var fow = enemy
     val reset = fow.stats(0)
-    var you = playerStats
-    out.println("You have entered combat with an " + enemy.name + "!")
-    /*while(fow.stats(0) >= 0 && you(0) >= 0) {
-      out.println("Your HP: " + you(0) + "			" + enemy.name + " HP: " + fow.stats(0), 1, in, out)
+    var yous = playerStats
+    var youe = equipStats
+    out.println("You have entered combat with a " + enemy.name + "!", 1, in, out)
+    while(fow.stats(0) >= 0 && yous(0) >= 0) {
+      out.println("Your HP: " + yous(0) + "			" + enemy.name + " HP: " + fow.stats(0))
       out.println("What attack would you like to use? \n", 1, in, out)
       out.println("Stab, Slash, Crush, Magic, or Ranged?", 1, in, out)
       val attack = readLine.toLowerCase().trim()
-      val damagedelt = 1 //damage
+      val damagedelt = 1 //damage(youe(1), yous(1))
       val damagetaken = 1 //damage
       attack match {
-        case "stab" => out.println("You have done " + damagedelt * you(1) / enemy.stats(6) + " damage.", 1, in, out)
-          fow.stats(0) = fow.stats(0) - damagedelt * you(1) / enemy.stats(6)
-        case "slash" =>  out.println("You have done " + damagedelt * you(2) / enemy.stats(7) + " damage.")
-          fow.stats(0) = fow.stats(0) - damagedelt * you(2) / enemy.stats(7)
-        case "crush" =>  out.println("You have done " + damagedelt * you(3) / enemy.stats(8) + " damage.")
-          fow.stats(0) = fow.stats(0) - damagedelt * you(3) / enemy.stats(8)
-        case "magic" =>   out.println("You have done " + damagedelt * you(4) / enemy.stats(9) + " damage.")
-          fow.stats(0) = fow.stats(0) - damagedelt * you(4) / enemy.stats(9)
-        case "ranged" =>  out.println("You have done " + damagedelt * you(5) / enemy.stats(10) + " damage.")
-          fow.stats(0) = fow.stats(0) - damagedelt * you(5) / enemy.stats(10)
+        case "stab" => out.println("You have done " + damagedelt * yous(1) / enemy.stats(6) + " damage.")
+          fow.stats(0) = fow.stats(0) - damagedelt * yous(1) / enemy.stats(6)
+        case "slash" =>  out.println("You have done " + damagedelt * yous(2) / enemy.stats(7) + " damage.")
+          fow.stats(0) = fow.stats(0) - damagedelt * yous(2) / enemy.stats(7)
+        case "crush" =>  out.println("You have done " + damagedelt * yous(3) / enemy.stats(8) + " damage.")
+          fow.stats(0) = fow.stats(0) - damagedelt * yous(3) / enemy.stats(8)
+        case "magic" =>   out.println("You have done " + damagedelt * yous(4) / enemy.stats(9) + " damage.")
+          fow.stats(0) = fow.stats(0) - damagedelt * yous(4) / enemy.stats(9)
+        case "ranged" =>  out.println("You have done " + damagedelt * yous(5) / enemy.stats(10) + " damage.")
+          fow.stats(0) = fow.stats(0) - damagedelt * yous(5) / enemy.stats(10)
       }
-      you(0) = you(0) - damagetaken * fow.stats(fow.attack) / you(6)
-      out.println(" You have taken " + damagetaken * enemy.stats(1) / you(6) + " points of damage.", 1, in, out)
-    }*/
-    if(you(0) <= 0) { 
-      out.println("You lost try again.")
-      hold = false
+      yous(0) = yous(0) - damagetaken * fow.stats(fow.attack) / yous(6)
+      out.println(" You have taken " + damagetaken * enemy.stats(1) / yous(6) + " points of damage.")
     }
+    if(yous(0) <= 0) out.println("You lost try again.")
     else if(fow.stats(0) <= 0) {
       out.println("You won. here is your reward!")
-      hold = false
       //val drop = lootDrop(enemy.drops)
       //val dropName = (for(i <- 0 to drop.length-1) yield {drop(i).name}).toList
       //if(drop.length == 0) out.println("Bad luck no drop")
@@ -478,12 +437,12 @@ run - try to escape.""")
     Item("t-shirt","It says 'YOU SHAL NOT PASS!'",1,Array(25, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25),
         true,"top"),
     Item("slacks","They give off an aura of misfortune...",1,Array(25, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25),
-        true,"bottom"),
+        true,"hand"),
     Item("roller_skates","They strike fear into the hearts of all who gaze apon them!",
-        1,Array(10, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25),true,"boots"))
+        1,Array(25, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25),true,"hand"))
   }
   def sItems(): Array[Item] = {
-    //kit = false
+    kit = false
     Array(
     Item("axe","It is used to cut down trees. It is not the best but it gets the job done.",1,Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
         true,"hand"),

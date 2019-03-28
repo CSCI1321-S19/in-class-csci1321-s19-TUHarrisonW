@@ -1,4 +1,4 @@
-7
+13
 L_Castle
 Lumbridge
 You are located right outside a castle next to a fountain. The doors to the castle are closed. To the East is the Goblin House.
@@ -15,9 +15,8 @@ It is used to cut down trees. It is not the best but it gets the job done.
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 true
 hand
--1,-1,-1,Gob_House,-1,-1
+-1,-1,Gob_House,-1,-1,-1
 0
-##########
 Gob_House
 Goblin House
 It is a small, broken down, one room house surrounded by goblins. To the East is Lumbridge, and the West is AL Kharid.
@@ -34,20 +33,8 @@ Not the best weapon but its better then nothing.
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 true
 hand
-Chick_Coop,-1,L_Castle,Al_KM,-1,-1
-1
-goblin
-its a Goblin
-15, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-1
-dagger
-Not the best weapon but its better then nothing.
-1
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-true
-hand
-1
-##########
+Chick_Coop,-1,Al_KM,L_Castle,-1,-1
+0
 Al_KM
 Al Kharid Market
 A desert area with many large scorpions.
@@ -58,34 +45,65 @@ It Gold you can buy things with it.
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 false
 false
--1,Al_KP,Gob_House,-1,-1,-1
+Desert_Mine,Al_KP,-1,Gob_House,-1,-1
 0
-##########
 Al_KP
 Al Kharid Palace
 A grand manner where many enemies reside.
 0
 Al_KM,-1,-1,-1,-1,-1
 0
-##########
 Chick_Coop
 Chicken Coop
 There are chickens and eggs all over the place.
 0
 Varrock_Mines,Gob_House,-1,-1,-1,-1
 0
-##########
 Varrock_Mines
 Varrock Mines
 There is a lot of ore around the place.
 0
 Varrock_Square,Chick_Coop,-1,-1,-1,-1
 0
-##########
 Varrock_Square
 Varrock Square
 You are in the middle of Varrock. One of the trading hubs of the continent.
 0
--1,Varrock_Mines,-1,-1,-1,-1
+Varrock_Castle,Varrock_Mines,-1,-1,-1,-1
 0
-##########
+Varrock_Castle
+Varrock Castle
+You are in front of the king! King Lewis can be attacked but you will loose.
+0
+-1,Varrock_Square,-1,Grand_Exchange,-1,-1
+0
+Grand_Exchange
+Grand Exchange
+The center of all trade, the Grand Exchange. You can buy anything you want for a price.
+0
+-1,-1,Varrock_Castle,-1,-1,-1
+0
+Desert_Mine
+Desert Mine
+You are surrounded by ore. 
+0
+-1,Al_KM,-1,-1,-1,-1
+0
+Server_Home
+Server Home
+N/A
+0
+-1,-1,-1,-1,-1,-1
+0
+Graveyard
+Graveyard
+It is the graveyard where almost all Lumbridge nobles are buried.
+0
+L_Castle,Swamp_1,-1,-1,-1,-1
+0
+Swamp_1
+Swamp
+It is the swamp located right next to Lumbridge.
+0
+Graveyard,-1,-1,-1,-1,-1
+0

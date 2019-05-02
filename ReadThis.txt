@@ -1,0 +1,18 @@
+How to use my mud.
+
+Start up:
+1) Run the mud like normal. 
+2) On the same terminal/console where it was run type "start"
+3) Wait till it says "Server is now open"
+4) Play like normal (can network in & play)
+
+
+Things to know:
+1) The admin (where mud file was run / where user typed "start") can not play like a normal player
+		in order to play a client must connect in.
+2)PVP is not allowed. Only NPCs can be attacked.
+
+tip:
+1) Don't attack the heralds
+2) Don't attack king_lewis
+3) You have a starting inventory. 

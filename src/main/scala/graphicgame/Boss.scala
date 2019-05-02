@@ -2,49 +2,39 @@ package graphicgame
 
 import collection.mutable
 
-class Enemy(xp: Double, yp: Double, wp: Double, hp: Double, var plr:Int) extends ArrayQueue with Entity {
+class Boss(xp: Double, yp: Double, wp: Double, hp: Double, var plr:Int) extends ArrayQueue with Entity {
   private var _stillHere = true
   
   def height: Double = hp
   def width: Double = wp
   def x: Double = xp
   def y: Double = yp
-  def style: Int = 2
+  def style: Int = 4
   def score: Int = 0
   def Update(delay: Double): Unit = ???
 	def postCheck():(Double,Double) = (xp,yp)
 	def kill(): Unit = _stillHere = false
-	def respawn():Enemy = {
-    new Enemy(56,56,1.0,1.0, plr)
+	def respawn():Boss = {
+    new Boss(56,56,1.0,1.0, plr)
   }
 	def stillHere(): Boolean = _stillHere
 	def who(): Int = plr
 	def changewho(nplr: Int): Unit = {plr = nplr}
 
 	
-	def move(dx: Double,dy: Double): Enemy = { 
-    new Enemy(x + dx,y + dy,1,1, plr)
+	def move(dx: Double,dy: Double): Boss = { 
+    new Boss(x + dx,y + dy,1,1, plr)
   }
   
   val offsets = List((-1,0), (1,0), (0,1), (0,-1))
   
-  def shortMove(enemy: Enemy, i: Int, maze: Maze, player: Player): Enemy = {
-    val theWay = for(i <- enemy.offsets) yield {
-      enemy.shortestPath(enemy.x.toInt + i._1, enemy.y.toInt + i._2, player.x.toInt, player.y.toInt, maze)
+  def shortMove(boss: Boss, i: Int, maze: Maze, player: Player): Boss = {
+    val theWay = for(i <- boss.offsets) yield {
+      boss.shortestPath(boss.x.toInt + i._1, boss.y.toInt + i._2, player.x.toInt, player.y.toInt, maze)
     }
     val minWay = theWay.indexOf(theWay.min)
     val (x,y) = offsets(minWay)
-      if(Entity.isClear(x,y,enemy, maze)) { 
-        move(x,y)
-      }
-      else {
-        val minWay = theWay.indexOf(theWay.min,theWay.indexOf(theWay.min) + 1)
-        if(minWay != -1) {
-          val (x,y) = offsets(minWay)
-          if(Entity.isClear(x,y,enemy, maze)) move(x,y)
-          else enemy
-        } else enemy
-      }
+    move(x,y)
   }
   
   def shortestPath(sx: Int, sy: Int, ex: Int, ey: Int, maze: Maze): Int = {

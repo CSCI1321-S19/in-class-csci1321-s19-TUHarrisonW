@@ -22,6 +22,10 @@ object Main extends JFXApp {
       val gc = canvas.graphicsContext2D
       val renderer = new Renderer2D(gc,10)
       val level = new Level
+      val sock = "jack"
+      val sock2 = "jack2"
+      level.addPlr(sock)
+      level.addPlr(sock2)
       //for (r <- -5 until level.maze.height + 5) {
       //  for (c <- -5 until level.maze.width + 5) {
       //    if (level.maze(r, c) == Wall) print('#') else print(' ')
@@ -34,11 +38,16 @@ object Main extends JFXApp {
 		  onKeyPressed = (ke: KeyEvent) => {
 		    if(level.lstplayer.length != 0){
         ke.code match {
-          case KeyCode.Up => level.lstplayer(0).upPressed()
-          case KeyCode.Down => level.lstplayer(0).downPressed()
-          case KeyCode.Left => level.lstplayer(0).leftPressed()
-          case KeyCode.Right => level.lstplayer(0).rightPressed()
-          case KeyCode.Space => level.lstplayer(0).spacePressed()
+          case KeyCode.Up => level.lstplayer(level.lstplayerOrder.indexOf(sock)).upPressed()
+          case KeyCode.Down => level.lstplayer(level.lstplayerOrder.indexOf(sock)).downPressed()
+          case KeyCode.Left => level.lstplayer(level.lstplayerOrder.indexOf(sock)).leftPressed()
+          case KeyCode.Right => level.lstplayer(level.lstplayerOrder.indexOf(sock)).rightPressed()
+          case KeyCode.Space => level.lstplayer(level.lstplayerOrder.indexOf(sock)).spacePressed()
+          case KeyCode.W => level.lstplayer(level.lstplayerOrder.indexOf(sock2)).upPressed()
+          case KeyCode.S => level.lstplayer(level.lstplayerOrder.indexOf(sock2)).downPressed()
+          case KeyCode.A => level.lstplayer(level.lstplayerOrder.indexOf(sock2)).leftPressed()
+          case KeyCode.D => level.lstplayer(level.lstplayerOrder.indexOf(sock2)).rightPressed()
+          case KeyCode.Z => level.lstplayer(level.lstplayerOrder.indexOf(sock2)).spacePressed()
           case _ =>
         }
 		    }
@@ -47,11 +56,16 @@ object Main extends JFXApp {
       onKeyReleased = (ke: KeyEvent) => {
         if(level.lstplayer.length != 0){
         ke.code match {
-          case KeyCode.Up => level.lstplayer(0).upReleased()
-          case KeyCode.Down => level.lstplayer(0).downReleased()
-          case KeyCode.Left => level.lstplayer(0).leftReleased()
-          case KeyCode.Right => level.lstplayer(0).rightReleased()
-          case KeyCode.Space => level.lstplayer(0).spaceReleased()
+          case KeyCode.Up => level.lstplayer(level.lstplayerOrder.indexOf(sock)).upReleased()
+          case KeyCode.Down => level.lstplayer(level.lstplayerOrder.indexOf(sock)).downReleased()
+          case KeyCode.Left => level.lstplayer(level.lstplayerOrder.indexOf(sock)).leftReleased()
+          case KeyCode.Right => level.lstplayer(level.lstplayerOrder.indexOf(sock)).rightReleased()
+          case KeyCode.Space => level.lstplayer(level.lstplayerOrder.indexOf(sock)).spaceReleased()
+          case KeyCode.W => level.lstplayer(level.lstplayerOrder.indexOf(sock2)).upReleased()
+          case KeyCode.S => level.lstplayer(level.lstplayerOrder.indexOf(sock2)).downReleased()
+          case KeyCode.A => level.lstplayer(level.lstplayerOrder.indexOf(sock2)).leftReleased()
+          case KeyCode.D => level.lstplayer(level.lstplayerOrder.indexOf(sock2)).rightReleased()
+          case KeyCode.Z => level.lstplayer(level.lstplayerOrder.indexOf(sock2)).spaceReleased()
           case _ =>
         }
         }
@@ -63,8 +77,10 @@ object Main extends JFXApp {
         if (lastTime != -1) {
           val delay = (time - lastTime) / 1e9
           if(level.lstplayer.length != 0){
-            level.update(delay)
-            renderer.render(level, 50, 40)
+            level.update(delay, sock)
+            level.update(delay, sock2)
+            val pl = level.makePassable()
+            renderer.render(pl)
         }
         }
         lastTime = time

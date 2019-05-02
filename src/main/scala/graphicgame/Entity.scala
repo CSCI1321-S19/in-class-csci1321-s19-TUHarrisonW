@@ -5,6 +5,10 @@ trait Entity extends Serializable {
   def y: Double
   def width: Double
   def height: Double
+  def style: Int
+  def score: Int
+  
+  def makePassable(): PassableEntity = PassableEntity(x, y, width, height, style, score)
   
 //  def update(delay: Double): Unit
 //  def postCheck(): Unit // You can delete this if you don't use it.

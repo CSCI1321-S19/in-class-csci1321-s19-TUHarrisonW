@@ -37,17 +37,17 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   /**
    * This method is called to render things to the screen.
    */
-  def render(level: Level, cx: Double, cy: Double): Unit = {
-    lastCenterX = cx
-    lastCenterY = cy
+  def render(level: PassableLevel): Unit = {
+    lastCenterX =  50
+    lastCenterY =  40
 
     val drawWidth = (gc.canvas.getWidth / blockSize).toInt + 1
     val drawHeight = (gc.canvas.getWidth / blockSize).toInt + 1
 
      //Draw walls and floors
     for {
-      x <- cx.toInt - drawWidth / 2 - 1 to cx.toInt + drawWidth / 2 + 1
-      y <- cy.toInt - drawHeight / 2 - 1 to cy.toInt + drawHeight / 2 + 1
+      x <- lastCenterX.toInt - drawWidth / 2 - 1 to lastCenterX.toInt + drawWidth / 2 + 1
+      y <- lastCenterY.toInt - drawHeight / 2 - 1 to lastCenterY.toInt + drawHeight / 2 + 1
     } {
       val img = level.maze(x, y) match {
         case Wall => wallImage
@@ -64,18 +64,27 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
 
      //Draw entities
     for (e <- level.entities) {
-      val img = e match {
-        case p: Player => { 
+      val img = e.style match {
+        case 1 => { 
           gc.fill = Color.Green 
-          gc.fillRect(blocksToPixelsX(level.lstplayer(0).x), blocksToPixelsY(level.lstplayer(0).y), blockSize, blockSize) //playerImage
+          gc.fillRect(blocksToPixelsX(e.x), blocksToPixelsY(e.y), blockSize, blockSize) //playerImage
+          gc.fill = Color.White
+          gc.fillText("Score: "+e.score, blocksToPixelsX(54), blocksToPixelsX(62))
         }
-        case e: Enemy => { //enemyImage 
+        case 2 => { //enemyImage 
           gc.fill = Color.Red 
-          gc.fillRect(blocksToPixelsX(level.lstenemy(level.lstenemy.indexOf(e)).x), blocksToPixelsY(level.lstenemy(level.lstenemy.indexOf(e)).y), blockSize, blockSize)
+          gc.fillRect(blocksToPixelsX(e.x), blocksToPixelsY(e.y), blockSize, blockSize)
         }
-        case b: Bomb => {
+        case 3 => {
           gc.fill = Color.Blue 
-          gc.fillRect(blocksToPixelsX(level.lstbomb(0).x), blocksToPixelsY(level.lstbomb(0).y), blockSize, blockSize)
+          gc.fillRect(blocksToPixelsX(e.x), blocksToPixelsY(e.y), blockSize, blockSize)
+        }
+        case 4 => {
+          gc.fill = Color.Purple 
+          gc.fillRect(blocksToPixelsX(e.x), blocksToPixelsY(e.y), blockSize, blockSize)
+        }
+        case m => {
+          println("Render2D: Case not delt with: "+e)
         }
 //        case g: Generator => generatorImage
       }

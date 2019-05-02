@@ -11,8 +11,7 @@ class Room (
     name: String,
     desc: String,
     private var items: List[Item],
-    exits: Array[String],
-    enemies: Array[Enemy]) extends Actor{
+    exits: Array[String])extends Actor{
     val playerManager = start._playerManager
     val roomManager = start._roomManager
   
@@ -20,7 +19,7 @@ class Room (
     case senddesc(s:String, name: String) => playerManager ! recievedesc(description, name: String)
     case sendexit(s:String,  dir: Int, name: String) => playerManager ! recieveexit(exit(), dir, name: String)
     case sendItems(test:List[String], s:String, name: String) => playerManager ! recieveItems(itemNamesperRoom(), test, name: String)
-    case sendDropItem(item:Item, itemAmount:Int, s:String, testList:List[String]) => dropItem(item, itemAmount)
+    case sendDropItem(item:Item, itemAmount:Int, s:String) => dropItem(item, itemAmount)
     case sendItem(itemName: String, itemAmount:Int, s, test:List[String],name: String) => playerManager ! recieveItem(getItem(itemName, itemAmount), test, name: String)
     case m => println("Room Unhandled message in Minion: " + m)
   }
@@ -35,7 +34,7 @@ class Room (
   def getItem(itemName: String, itemAmount: Int = -1): Item = {
      val inames = for(i <- 0 to items.length-1) yield {items(i).name}
      val check = inames.indexOf(itemName)
-     if(itemAmount != -1){
+     if(itemAmount != -1 && items(check).qty > itemAmount){
        items = items.patch(check, Seq(items(check).copy(qty = items(check).qty - itemAmount)), 1)
        items(check)
      } else {

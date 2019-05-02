@@ -1,4 +1,4 @@
-13
+31
 L_Castle
 Lumbridge
 You are located right outside a castle next to a fountain. The doors to the castle are closed. To the East is the Goblin House.
@@ -15,8 +15,8 @@ It is used to cut down trees. It is not the best but it gets the job done.
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 true
 hand
--1,-1,Gob_House,-1,-1,-1
-0
+Sheep_Farm,Graveyard,Gob_House,-1,-1,-1
+##########################################    1
 Gob_House
 Goblin House
 It is a small, broken down, one room house surrounded by goblins. To the East is Lumbridge, and the West is AL Kharid.
@@ -34,7 +34,7 @@ Not the best weapon but its better then nothing.
 true
 hand
 Chick_Coop,-1,Al_KM,L_Castle,-1,-1
-0
+##########################################   2
 Al_KM
 Al Kharid Market
 A desert area with many large scorpions.
@@ -46,64 +46,172 @@ It Gold you can buy things with it.
 false
 false
 Desert_Mine,Al_KP,-1,Gob_House,-1,-1
-0
+##########################################   3
 Al_KP
 Al Kharid Palace
 A grand manner where many enemies reside.
 0
 Al_KM,-1,-1,-1,-1,-1
-0
+##########################################   4
 Chick_Coop
 Chicken Coop
 There are chickens and eggs all over the place.
 0
-Varrock_Mines,Gob_House,-1,-1,-1,-1
-0
+Varrock_Mines,Gob_House,-1,Sheep_Farm,-1,-1
+##########################################   5
 Varrock_Mines
 Varrock Mines
 There is a lot of ore around the place.
 0
 Varrock_Square,Chick_Coop,-1,-1,-1,-1
-0
+##########################################   6
 Varrock_Square
 Varrock Square
 You are in the middle of Varrock. One of the trading hubs of the continent.
 0
-Varrock_Castle,Varrock_Mines,-1,-1,-1,-1
-0
+Varrock_Castle,Varrock_Mines,-1,Varrock_Outskirts,-1,-1
+##########################################   7
 Varrock_Castle
 Varrock Castle
 You are in front of the king! King Lewis can be attacked but you will loose.
 0
 -1,Varrock_Square,-1,Grand_Exchange,-1,-1
-0
+##########################################   8
 Grand_Exchange
 Grand Exchange
 The center of all trade, the Grand Exchange. You can buy anything you want for a price.
 0
--1,-1,Varrock_Castle,-1,-1,-1
-0
+-1,Varrock_Outskirts,Varrock_Castle,-1,-1,-1
+##########################################   9
 Desert_Mine
 Desert Mine
 You are surrounded by ore. 
 0
 -1,Al_KM,-1,-1,-1,-1
-0
+##########################################   10
 Server_Home
 Server Home
 N/A
 0
 -1,-1,-1,-1,-1,-1
-0
+##########################################   11
 Graveyard
 Graveyard
 It is the graveyard where almost all Lumbridge nobles are buried.
 0
 L_Castle,Swamp_1,-1,-1,-1,-1
-0
+##########################################   12
 Swamp_1
 Swamp
 It is the swamp located right next to Lumbridge.
 0
 Graveyard,-1,-1,-1,-1,-1
+##########################################   13
+Sheep_Farm
+Sheep Farm
+Its a large field full of sheep.
 0
+Flour_Mill,L_Castle,Chick_Coop,-1,-1,-1
+##########################################   14
+Flour_Mill
+Flour Mill
+This is a place where wheat can be turned into flour.
+0
+-1,Sheep_Farm,-1,Draynor_Village,-1,-1
+##########################################   15
+Draynor_Village
+Draynor Village
+A small village that is primarily built on fishing.
+0
+Draynor_Manor,Wizards_Tower,Flour_Mill,Port_Sarim,-1,-1
+##########################################   16
+Draynor_Manor
+Draynor Manor
+A creepy mansion that seems to be haunted.
+0
+-1,Draynor_Village,-1,-1,-1,-1
+##########################################   17
+Wizards_Tower
+Wizard's Tower
+It is a large tower located in the middle of a island. 
+0
+Draynor_Village,-1,-1,-1,Wizards_Tower2,-1
+##########################################   18
+Wizards_Tower2
+Wizard's Tower Second Floor
+You see many wizards examining a lesser demon.
+0
+-1,-1,-1,-1,Wizards_Tower3,Wizards_Tower
+##########################################   19
+Wizards_Tower3
+Wizard's Tower Third Floor
+The wizard king is sitting at his desk doing paper work for a small boy with anti magic swords.
+0
+-1,-1,-1,-1,-1,Wizards_Tower2
+##########################################   20
+Port_Sarim
+Port Sarim
+A large port where many fishing boats are docked. 
+0
+-1,-1,Draynor_Village,Rimmington,-1,-1
+##########################################   21
+Rimmington
+Rimmington 
+A small town where the crafting guild and the Melzar's Maze is located.
+0
+Flador,-1,Port_Sarim,-1,-1,-1
+##########################################   22
+Flador
+Flador
+The second largest town in the known world. Also the headquarters of the white knights.
+0
+Cross_Roads,Rimmington,-1,-1,-1,White_Knights_Castle
+##########################################   23
+White_Knights_Castle
+White Knights Castle
+A grad castle where the order of white knights call home. Started by the great knight Sir. Clayton.
+0
+-1,-1,-1,-1,Flador,-1
+##########################################   24
+Cross_Roads
+Cross Roads
+A place with several roads meet. There is a man with a very large sword that sounds like a frying pan when it hits something. 
+0
+Dwarven_Mine,Flador,-1,Goblin_Village,-1,-1
+##########################################   25
+Goblin_Village
+Goblin Village
+EVERYTHING IS DEAD! THERE IS BLOOD EVERYWHERE!
+0
+-1,-1,Cross_Roads,-1,-1,-1
+##########################################   26
+Dwarven_Mine
+Dwarven_Mine
+Small people are hitting rocks happily. 
+0
+Monastery,Cross_Roads,Barbarian_Village,-1,-1,-1
+##########################################   27
+Barbarian_Village
+Barbarian Village
+A small but strong community.
+0
+Edgeville,-1,Varrock_Outskirts,Dwarven_Mine,-1,-1
+##########################################   28
+Varrock_Outskirts
+The Outskirts of Varrock
+You are on the endge of town.
+0
+Grand_Exchange,-1,Varrock_Square,Barbarian_Village,-1,-1
+##########################################   29
+Monastery
+Monastery
+A place where munks live. 
+0
+-1,Dwarven_Mine,Edgeville,-1,-1,-1
+##########################################   30
+Edgeville
+Edgeville
+A town located on the edge of the wilderness. 
+0
+-1,Barbarian_Village,Monastery,-1,-1,-1
+##########################################   31
